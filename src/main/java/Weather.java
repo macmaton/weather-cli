@@ -11,7 +11,7 @@ public class Weather {
                    Float precipIntensity, Float precipProbability, Float humidity) {
         this.time = time;
         this.summary = summary;
-        this.precipType = precipType;
+        this.precipType = (precipType != null) ? precipType : "none";
         this.realTemperature = realTemperature;
         this.apparentTemperature = apparentTemperature;
         this.precipIntensity = precipIntensity;
@@ -23,8 +23,8 @@ public class Weather {
         return time;
     }
 
-    public String getTimeString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy 'at' h:mm a");
+    private String getTimeString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' h:mm a");
         String datetime = sdf.format(time*1000L);
         return datetime;
     }
@@ -57,6 +57,7 @@ public class Weather {
         return humidity;
     }
 
+    @Override
     public String toString() {
         StringBuilder result = new StringBuilder("Time: ");
         result.append(getTimeString());
@@ -78,11 +79,11 @@ public class Weather {
         result.append(String.valueOf(Math.round(precipProbability * 100)));
         result.append("%\n");
 
-        result.append("Precipitation intensity: ");
-        result.append(String.valueOf(Math.round(precipIntensity * 100)));
-        result.append("%\n");
+        if (precipType != "none") {
+            result.append("Precipitation intensity: ");
+            result.append(String.valueOf(Math.round(precipIntensity * 100)));
+            result.append("%\n");
 
-        if (precipType != null) {
             result.append("Precipitation type: ");
             result.append(precipType);
             result.append("\n");
